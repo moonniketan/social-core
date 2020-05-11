@@ -58,13 +58,13 @@ tests_requirements = tests_requirements_base + \
     read_tests_requirements('requirements-python%s.txt' % PY)
 
 requirements_all = requirements_openidconnect + \
-                   requirements_saml + \
-                   requirements_azuread
+    requirements_saml + \
+    requirements_azuread
 
 tests_requirements = tests_requirements + requirements_all
 
 setup(
-    name='social-auth-core',
+    name='social-auth-core-hack',
     version=read_version(),
     author='Matias Aguirre',
     author_email='matiasaguirre@gmail.com',

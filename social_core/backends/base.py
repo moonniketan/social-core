@@ -205,7 +205,7 @@ class BaseAuth(object):
         overridden by GET parameters."""
         extra_arguments = self.setting('AUTH_EXTRA_ARGUMENTS', {}).copy()
         extra_arguments.update((key, self.data[key]) for key in extra_arguments
-                                    if key in self.data)
+                               if key in self.data)
         return extra_arguments
 
     def uses_redirect(self):
@@ -218,10 +218,10 @@ class BaseAuth(object):
         if self.setting('VERIFY_SSL') is not None:
             kwargs.setdefault('verify', self.setting('VERIFY_SSL'))
         kwargs.setdefault('timeout', self.setting('REQUESTS_TIMEOUT') or
-                                     self.setting('URLOPEN_TIMEOUT'))
+                          self.setting('URLOPEN_TIMEOUT'))
         if self.SEND_USER_AGENT and 'User-Agent' not in kwargs['headers']:
             kwargs['headers']['User-Agent'] = self.setting('USER_AGENT') or \
-                                              user_agent()
+                user_agent()
 
         try:
             if self.SSL_PROTOCOL:
@@ -235,7 +235,10 @@ class BaseAuth(object):
         return response
 
     def get_json(self, url, *args, **kwargs):
-        return self.request(url, *args, **kwargs).json()
+        response = self.request(url, *args, **kwargs)
+        print("=========")
+        print(response.text)
+        return response.json()
 
     def get_querystring(self, url, *args, **kwargs):
         return parse_qs(self.request(url, *args, **kwargs).text)

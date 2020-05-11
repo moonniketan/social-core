@@ -18,32 +18,27 @@ class InstagramOAuth2(BaseOAuth2):
     def get_user_id(self, details, response):
         # Sometimes Instagram returns 'user', sometimes 'data', but API docs
         # says 'data' http://instagram.com/developer/endpoints/users/#get_users
-        user = response.get('user') or response.get('data') or {}
-        return user.get('id')
+        user = response.get('user_id') or response.get('data') or {}
+        return user
 
     def get_user_details(self, response):
         """Return user details from Instagram account"""
         # Sometimes Instagram returns 'user', sometimes 'data', but API docs
         # says 'data' http://instagram.com/developer/endpoints/users/#get_users
-        user = response.get('user') or response.get('data') or {}
-        username = user['username']
-        email = user.get('email', '')
-        fullname, first_name, last_name = self.get_user_names(
-            user.get('full_name', '')
-        )
-        return {'username': username,
-                'fullname': fullname,
-                'first_name': first_name,
-                'last_name': last_name,
-                'email': email}
+        username = response.get['username']
+
+        return {'username': username}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
         key, secret = self.get_key_and_secret()
-        params = {'access_token': access_token}
-        sig = self._generate_sig("/users/self", params, secret)
+        params = {
+            'access_token': access_token,
+            'fields': "id,username"
+        }
+        sig = self._generate_sig("/me/", params, secret)
         params['sig'] = sig
-        return self.get_json('https://api.instagram.com/v1/users/self',
+        return self.get_json('https://api.instagram.com/me/',
                              params=params)
 
     def _generate_sig(self, endpoint, params, secret):
